@@ -2,13 +2,21 @@
   "version": "1.0.103",
   "name": "thermostat_mqtt_to_sql_bun",
   "devDependencies": {
-    "bun-types": "latest"
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "bun-types": "latest",
+    "eslint-config-standard-with-typescript": "^36.1.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
-    "hono": "^2.2.5"
+    "mqtt": "^4.3.7",
+    "postgres": "^3.3.5"
   },
   "scripts": {
-    "start": "bun run src/index.ts"
+    "start": "bun run src/index.ts",
+    "watch": "bun run --watch src/index.ts"
   },
   "module": "src/index.js"
 }

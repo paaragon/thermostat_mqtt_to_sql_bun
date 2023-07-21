@@ -1,19 +1,51 @@
-import { Hono } from "hono";
-import { serveStatic } from "hono/serve-static.bun";
+import * as mqtt from "mqtt"
+import { log } from '@lib/log'
+import { MQTT_KEEPALIVE, MQTT_PORT, MQTT_SERVER, MQTT_TOPIC_PREFIX } from './config'
+import { handleMode, handleRead, handleSet, handleStartup, handleStatus } from './handle-messages'
 
-const port = parseInt(process.env.PORT) || 3000;
+log.info('Connecting to MQTT server...')
+const client = mqtt.connect(`mqtt://${MQTT_SERVER}:${MQTT_PORT}`)
 
-const app = new Hono();
+client.on('connect', () => {
+  log.info('Connected')
+  log.info('Suscribing...')
+  client.subscribe(`${MQTT_TOPIC_PREFIX}/#`)
+})
 
-app.use("/favicon.ico", serveStatic({ path: "./public/favicon.ico" }));
+client.on('message', function (topic, message) {
+  handleMessage(topic, message.toString())
+})
 
-app.get("/", (c) => {
-  return c.json({ message: "Hello World!" });
-});
+async function handleMessage(topic: string, message: string) {
+  log.info("New message: " + topic + " - " + message)
+  const [, method, stationId] = topic.split('/')
+  if (!method) {
+    log.error('No method found in topic')
+    return
+  }
 
-console.log(`Running at http://localhost:${port}`);
-
-export default {
-  port,
-  fetch: app.fetch,
-};
+  try {
+    switch (method) {
+      case 'read':
+        handleRead(stationId, message)
+        break
+      case 'status':
+        handleStatus(message)
+        break
+      case 'mode':
+        handleMode(message)
+        break
+      case 'set':
+        handleSet(stationId, message)
+        break
+      case 'startup':
+        handleStartup(stationId, message)
+        break
+      default:
+        log.warning("unknown method", method)
+        break
+    }
+  } catch (e) {
+    log.error(e)
+  }
+}

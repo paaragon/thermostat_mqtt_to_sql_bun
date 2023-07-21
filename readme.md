@@ -1,21 +1,24 @@
-# Hono with Bun runtime
+# thermostat_mqtt_to_sql
+This module of the nodemcu-thermostat project takes events from the MQTT topics and stores the info in a database
 
-## Getting Started
+## ENVIRONMENT VARIABLES
 
-### Cloning the repo
+To make it work, is necessary some environment variables:
 
-```sh
-bun create hono ./NAME_HERE
-```
+- MQTT_SERVER: the host of the mqtt broker
+- MQTT_PORT: the port of the mqtt broker
+- MQTT_KEEPALIVE: the keepalive for the conneciton to the mqtt broker (default 60)
+- MQTT_TOPIC_PREFIX: the main mqtt topic
+- PG_HOST: the host of the database
+- PG_PORT: the port of the database
+- PG_DB: the name of the database
+- PG_USER: the user to connect to the database
+- PG_PASS: the pass of the user of the database
 
-### Development
+## DATABASE
 
-```
-bun run start
-```
+This module works with a PostgreSQL database. The initial script to create the necesary objects is located in ./sql/initial.sql
 
-Open http://localhost:3000 with your browser to see the result.
+## BUILD AND RUN
 
-### For more information
-
-See <https://honojs.dev/>
+Check out the Makefile in this repo wich contains the necesary scripts to build and run the app.

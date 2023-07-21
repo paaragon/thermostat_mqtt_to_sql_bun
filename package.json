@@ -16,7 +16,11 @@
   },
   "scripts": {
     "start": "bun run src/index.ts",
-    "watch": "bun run --watch src/index.ts"
+    "watch": "bun run --watch src/index.ts",
+    "docker:build": "docker build -t ${npm_package_name}:${npm_package_version} .",
+    "docker:run": "docker run -it --rm --name=${npm_package_name} --env-file .env ${npm_package_name}:${npm_package_version}",
+    "predocker:publish": "docker tag ${npm_package_name}:${npm_package_version} paaragon/${npm_package_name}:${npm_package_version}",
+    "docker:publish": "docker push paaragon/${npm_package_name}:${npm_package_version}"
   },
   "module": "src/index.js"
 }

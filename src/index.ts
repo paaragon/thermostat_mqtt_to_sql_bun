@@ -1,6 +1,6 @@
 import * as mqtt from "mqtt"
 import { log } from '@lib/log'
-import { MQTT_KEEPALIVE, MQTT_PORT, MQTT_SERVER, MQTT_TOPIC_PREFIX } from './config'
+import { MQTT_PORT, MQTT_SERVER, MQTT_TOPIC_PREFIX } from './config'
 import { handleMode, handleRead, handleSet, handleStartup, handleStatus } from './handle-messages'
 
 log.info('Connecting to MQTT server...')
